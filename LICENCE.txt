@@ -1,0 +1,30 @@
+WeatherWidget License
+
+All Rights Reserved © 2025 Berat Tezer, Umut Eren Demir, Mert Taban
+
+1. Grant of Use
+This software may only be used with the prior written consent of the development team.
+Permitted scope of use (personal, academic, or commercial) must be explicitly defined in the written agreement provided by the authors.
+
+2. Copying and Distribution
+The source code or compiled versions of this software, in whole or in part, may not be copied, reproduced, shared, sold, or redistributed without explicit authorization.
+Any unauthorized reproduction or distribution constitutes a violation of copyright law.
+
+3. Commercial Use
+Commercial use of the software, including integration into products, services, or commercial projects, requires explicit prior written approval from the authors.
+Unauthorized commercial use will result in legal action.
+
+4. Modifications and Derivative Works
+Modifications, alterations, or the creation of derivative works are prohibited unless explicitly permitted in writing by the development team.
+Unauthorized derivative works shall be considered invalid and in violation of copyright.
+
+5. Disclaimer of Warranty
+This software is provided “as is”, without any express or implied warranties.
+The authors shall not be held liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use the software.
+Users assume full responsibility for operating the software.
+
+6. Validity
+This license becomes effective immediately upon downloading, installing, or using the software.
+All rights remain strictly reserved by the authors.
+
+License Type: Proprietary / Restricted Use License
