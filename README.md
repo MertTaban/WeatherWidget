@@ -104,7 +104,7 @@ weatherinsight/
 
 ## 📁 Depo Yapısı Hakkında Notlar
 
-- Bazı dizinlerde `.gitkeep` (veya `placeholder.txt`) dosyası bulunabilir.
+- Bazı dizinlerde `placeholder.txt` dosyası bulunabilir.
 - Bu dosyalar yalnızca klasör yapısının Git tarafından takip edilmesini sağlamak için eklenmiştir.
 - Gerçek içerik eklendikten sonra bu dosyaların silinmesi gerekir.
 
