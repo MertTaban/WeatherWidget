@@ -58,7 +58,57 @@ _(Buraya ekran görüntüleri ve gif’ler eklenecek)_
 
 ---
 
-## 📂 Katkıda Bulunma
+## 📁 Katkıda Bulunma
+
+Projeye katkıda bulunmak isteyenlerin profesyonel süreçleri takip etmesi beklenir:
+
+1. Fork → Branch açma → Geliştirme yapma
+2. Pull request açma → Code review süreci
+3. Issue açma ve tartışma kurallarına uyma
+
+---
+
+## 📂 Proje Yapısı
+
+```
+weatherinsight/
+│
+├── docs/                # Dokümantasyon ve diyagramlar
+│   └── screenshots/     # README için ekran görüntüleri
+│
+├── src/                 # Kaynak kod
+│   ├── backend/         # Veri işleme, modeller, analiz
+│   │   └── .gitkeep     # Yer tutucu (dosyalar eklendiğinde silin)
+│   │
+│   ├── frontend/        # PyQt5 arayüzü, temalar ve varlıklar
+│   │   ├── themes/      # Koyu & Açık temalar
+│   │   │   └── .gitkeep
+│   │   └── assets/      # İkonlar, görseller
+│   │       └── .gitkeep
+│   │
+│   └── main.py          # Giriş noktası
+│
+├── tests/               # Birim testleri
+│   └── .gitkeep
+│
+├── build/               # Derlenmiş çalıştırılabilir dosyalar (otomatik üretilir)
+│   └── .gitkeep
+│
+├── requirements.txt     # Python bağımlılıkları
+├── build.bat            # exe oluşturma scripti
+├── README.md
+└── LICENSE
+```
+
+---
+
+## 📁 Depo Yapısı Hakkında Notlar
+
+- Bazı dizinlerde `.gitkeep` (veya `placeholder.txt`) dosyası bulunabilir.
+- Bu dosyalar yalnızca klasör yapısının Git tarafından takip edilmesini sağlamak için eklenmiştir.
+- Gerçek içerik eklendikten sonra bu dosyaların silinmesi gerekir.
+
+---
 
 Projeye katkıda bulunmak isteyenlerin profesyonel süreçleri takip etmesi beklenir:
 
