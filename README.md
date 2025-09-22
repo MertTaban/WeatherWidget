@@ -1,6 +1,6 @@
 # 🌦️ WeatherWidget – Masaüstü Hava Durumu Widget’ı
 
-WeatherWidget, geçmiş 6 yıllık meteorolojik veriyi analiz ederek güncel hava tahminlerini **tutarlılık yüzdesi** ile birlikte sunan modern bir masaüstü widget uygulamasıdır.  
+WeatherWidget, geçmiş 10 yıllık meteorolojik veriyi analiz ederek güncel hava tahminlerini **tutarlılık yüzdesi** ile birlikte sunan modern bir masaüstü widget uygulamasıdır.  
 Bu proje, geliştiricilerin ekip çalışması deneyimi kazanması ve teknik tecrübelerini artırması amacıyla hayata geçirilmiştir.
 
 ---
