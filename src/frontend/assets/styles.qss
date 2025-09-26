@@ -1,0 +1,23 @@
+/* Kart görünümü */
+QWidget {
+  background: rgba(20,20,28,180);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  color: #e8e8f0;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+#valueLabel {
+  font-size: 28px;
+  font-weight: 700;
+  padding: 4px 0 8px 0;
+}
+QPushButton#primaryBtn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+}
+QPushButton#primaryBtn:hover {
+  background: rgba(255,255,255,0.12);
+}
