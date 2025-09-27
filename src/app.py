@@ -2,47 +2,53 @@ import asyncio
 import sys
 from pathlib import Path
 
+from PySide6.QtCore import QSettings
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
-from qasync import QEventLoop, asyncSlot
+from qasync import QEventLoop
 
-from backend.bus import EventBus
-from backend.services import ticker
 from frontend.views.main_widget import MainWidget
 
 
-def load_styles(app: QApplication):
-    qss_path = Path(__file__).parent / "frontend" / "assets" / "styles.qss"
+def read_text(p: Path) -> str:
     try:
-        app.setStyle("Fusion")  # daha tutarlı widget stili
-        app.setStyleSheet(qss_path.read_text(encoding="utf-8"))
-    except FileNotFoundError:
-        print(f"[WARN] QSS not found: {qss_path}")
+        return p.read_text(encoding="utf-8")
+    except Exception:
+        return ""
+
+
+def make_style(theme_key: str) -> str:
+    base = Path(__file__).resolve().parent / "frontend" / "assets"
+    fname = "styles_dark.qss" if theme_key == "dark" else "styles_light.qss"
+    qss_path = base / fname
+    qss = read_text(qss_path)
+    if not qss.strip():
+        print(f"[WARN] QSS missing or empty: {qss_path}")
+        qss = "#card { background-color:#222; color:#fff; border-radius:16px; }"
+    return qss
+
+
+def load_styles(theme_key: str):
+    app.setStyle("Fusion")
+    app.setStyleSheet(make_style(theme_key))
 
 
 async def main_async(app: QApplication):
-    bus = EventBus()
     ui = MainWidget()
     ui.show()
-
-    # sinyaller
-    @asyncSlot(dict)
-    async def on_manual_refresh(_=None):
-        # burada anlık fetch örneği yapılabilir
-        pass
-
-    ui.refresh_btn.clicked.connect(lambda: bus.data_updated.emit({"value": "↻"}))
-
-    # background döngü
-    async for data in ticker():
-        bus.data_updated.emit(data)
-        ui.value_label.setText(str(data["value"]))
+    done = asyncio.get_event_loop().create_future()
+    app.aboutToQuit.connect(lambda: done.set_result(True))
+    await done
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    load_styles(app)
-    app.setWindowIcon(QIcon())  # istersen ikon ekle
+    app.setWindowIcon(QIcon())
+    app.load_styles = load_styles  # type: ignore
+
+    s = QSettings("YourOrg", "WeatherWidget")
+    app.load_styles(s.value("theme", "dark"))
+
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
     with loop:
