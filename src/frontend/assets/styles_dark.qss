@@ -1,0 +1,39 @@
+#card {
+  background-color: rgba(20,20,28,0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  color: #e8e8f0;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Boyuta göre tipografi */
+#card[sizeVariant="small"]  { font-size: 13px; }
+#card[sizeVariant="medium"] { font-size: 15px; }
+#card[sizeVariant="large"]  { font-size: 17px; }
+
+/* Header */
+#header { padding-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+#locationLabel { font-weight: 600; letter-spacing: 0.2px; }
+
+/* İçerik */
+#tempValue { font-size: 22px; font-weight: 700; }
+#condition { font-size: 16px; font-weight: 700; }
+#consistency { font-style: italic; font-size: 11px; color: #c9c9d6; }
+
+/* Boyut farklılıkları (örnek: large'ta daha güçlü başlık) */
+#card[sizeVariant="large"] #tempValue { font-size: 26px; }
+#card[sizeVariant="large"] #condition { font-size: 18px; }
+
+/* Settings butonu ve menü */
+QPushButton#settingsBtn { border: none; background: transparent; }
+QPushButton#settingsBtn:hover { background-color: rgba(255,255,255,0.08); border-radius: 8px; }
+
+QMenu {
+  background: #1e1f27;
+  color: #e8e8f0;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+}
+QMenu::item { padding: 6px 12px; }
+QMenu::item:selected { background: rgba(255,255,255,0.08); }
+

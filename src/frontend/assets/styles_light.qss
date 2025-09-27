@@ -1,0 +1,55 @@
+/* ===== Light Theme — High Contrast ===== */
+#card {
+  /* Daha opak beyaz: arkadaki içerik parlamasın */
+  background-color: rgba(255,255,255,0.98);
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 16px;
+  color: #0f172a; /* slate-900 */
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Boyuta göre baz font */
+#card[sizeVariant="small"]  { font-size: 14px; }
+#card[sizeVariant="medium"] { font-size: 15px; }
+#card[sizeVariant="large"]  { font-size: 16px; }
+
+/* Header */
+#header {
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(15,23,42,0.08); /* slate-900 @8% */
+}
+#locationLabel {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #0b1220; /* biraz daha koyu */
+}
+
+/* İçerik */
+#tempValue   { font-size: 24px; font-weight: 800; color: #0b1220; }
+#condition   { font-size: 16px; font-weight: 700; color: #111827; } /* gray-900 */
+#consistency { font-style: italic; font-size: 12px; color: #475569; } /* slate-600 */
+
+/* Büyük boyutta biraz daha vurgu */
+#card[sizeVariant="large"] #tempValue { font-size: 28px; }
+#card[sizeVariant="large"] #condition { font-size: 18px; }
+
+/* Settings butonu ve menü */
+QPushButton#settingsBtn {
+  border: none;
+  background: transparent;
+}
+QPushButton#settingsBtn:hover {
+  background-color: rgba(15,23,42,0.06);
+  border-radius: 8px;
+}
+
+/* QMenu — açık tema için daha koyu kenar ve hafif gölge tonu */
+QMenu {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid rgba(15,23,42,0.15);
+  border-radius: 10px;
+}
+QMenu::item { padding: 7px 14px; }
+QMenu::item:selected { background: rgba(15,23,42,0.06); }
+
