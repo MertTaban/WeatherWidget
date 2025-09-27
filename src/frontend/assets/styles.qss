@@ -1,0 +1,30 @@
+/* frontend/assets/styles.qss */
+#card {
+  background-color: rgba(20,20,28,0.88);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  color: #e8e8f0;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+#valueLabel {
+  font-size: 28px;
+  font-weight: 700;
+  padding: 4px 0 8px 0;
+}
+
+/* Buton */
+QPushButton#primaryBtn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background-color: rgba(255,255,255,0.06);
+  color: #e8e8f0;
+}
+QPushButton#primaryBtn:hover {
+  background-color: rgba(255,255,255,0.12);
+}
+QPushButton#primaryBtn:pressed {
+  background-color: rgba(255,255,255,0.18);
+}
