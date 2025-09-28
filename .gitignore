@@ -1,1 +1,2 @@
 *.pyc
+src/backend/weather_prediction_model.pkl

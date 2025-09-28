@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+import asyncio
+import json
 from pathlib import Path
+from typing import Dict, Optional, Tuple
 
 from PySide6.QtCore import QEvent, QPoint, QSettings, Qt
 from PySide6.QtGui import QAction, QIcon, QMouseEvent, QPixmap
@@ -8,8 +13,8 @@ from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QFrame,
+    QGraphicsDropShadowEffect,
     QHBoxLayout,
-    QInputDialog,
     QLabel,
     QMenu,
     QPushButton,
@@ -17,372 +22,98 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-# Örnek ülke/şehir verisi (tam: Türkiye 81 il, Kıbrıs 6 şehir)
-COUNTRIES = {
-    "Türkiye": [
-        "Adana",
-        "Adıyaman",
-        "Afyonkarahisar",
-        "Ağrı",
-        "Aksaray",
-        "Amasya",
-        "Ankara",
-        "Antalya",
-        "Ardahan",
-        "Artvin",
-        "Aydın",
-        "Balıkesir",
-        "Bartın",
-        "Batman",
-        "Bayburt",
-        "Bilecik",
-        "Bingöl",
-        "Bitlis",
-        "Bolu",
-        "Burdur",
-        "Bursa",
-        "Çanakkale",
-        "Çankırı",
-        "Çorum",
-        "Denizli",
-        "Diyarbakır",
-        "Düzce",
-        "Edirne",
-        "Elazığ",
-        "Erzincan",
-        "Erzurum",
-        "Eskişehir",
-        "Gaziantep",
-        "Giresun",
-        "Gümüşhane",
-        "Hakkari",
-        "Hatay",
-        "Iğdır",
-        "Isparta",
-        "İstanbul",
-        "İzmir",
-        "Kahramanmaraş",
-        "Karabük",
-        "Karaman",
-        "Kars",
-        "Kastamonu",
-        "Kayseri",
-        "Kırıkkale",
-        "Kırklareli",
-        "Kırşehir",
-        "Kilis",
-        "Kocaeli",
-        "Konya",
-        "Kütahya",
-        "Malatya",
-        "Manisa",
-        "Mardin",
-        "Mersin",
-        "Muğla",
-        "Muş",
-        "Nevşehir",
-        "Niğde",
-        "Ordu",
-        "Osmaniye",
-        "Rize",
-        "Sakarya",
-        "Samsun",
-        "Siirt",
-        "Sinop",
-        "Sivas",
-        "Şanlıurfa",
-        "Şırnak",
-        "Tekirdağ",
-        "Tokat",
-        "Trabzon",
-        "Tunceli",
-        "Uşak",
-        "Van",
-        "Yalova",
-        "Yozgat",
-        "Zonguldak",
-    ],
-    "Kıbrıs": ["Lefkoşa", "Limasol", "Larnaka", "Baf", "Mağusa", "Girne"],
-    "Almanya": [
-        "Berlin",
-        "Hamburg",
-        "Münih",
-        "Köln",
-        "Frankfurt",
-        "Stuttgart",
-        "Düsseldorf",
-        "Dortmund",
-        "Essen",
-        "Leipzig",
-        "Bremen",
-        "Dresden",
-        "Hannover",
-        "Nürnberg",
-        "Bochum",
-        "Duisburg",
-        "Wuppertal",
-        "Bielefeld",
-        "Bonn",
-        "Münster",
-    ],
-    "Fransa": [
-        "Paris",
-        "Marsilya",
-        "Lyon",
-        "Toulouse",
-        "Nice",
-        "Nantes",
-        "Strazburg",
-        "Montpellier",
-        "Bordeaux",
-        "Lille",
-        "Rennes",
-        "Reims",
-        "Le Havre",
-        "Saint-Étienne",
-        "Toulon",
-        "Grenoble",
-        "Dijon",
-        "Angers",
-        "Nîmes",
-        "Villeurbanne",
-    ],
-    "İtalya": [
-        "Roma",
-        "Milano",
-        "Napoli",
-        "Torino",
-        "Palermo",
-        "Cenova",
-        "Bologna",
-        "Floransa",
-        "Bari",
-        "Catania",
-        "Venedik",
-        "Verona",
-        "Messina",
-        "Padova",
-        "Trieste",
-        "Brescia",
-        "Parma",
-        "Modena",
-        "Reggio Calabria",
-        "Perugia",
-    ],
-    "İspanya": [
-        "Madrid",
-        "Barselona",
-        "Valensiya",
-        "Sevilla",
-        "Zaragoza",
-        "Málaga",
-        "Murcia",
-        "Palma de Mallorca",
-        "Las Palmas",
-        "Bilbao",
-        "Alicante",
-        "Córdoba",
-        "Valladolid",
-        "Vigo",
-        "Gijón",
-        "Hospitalet",
-        "La Coruña",
-        "Granada",
-        "Vitoria-Gasteiz",
-        "Elche",
-    ],
-    "Birleşik Krallık": [
-        "Londra",
-        "Manchester",
-        "Birmingham",
-        "Liverpool",
-        "Leeds",
-        "Sheffield",
-        "Bristol",
-        "Newcastle",
-        "Nottingham",
-        "Leicester",
-        "Edinburgh",
-        "Glasgow",
-        "Cardiff",
-        "Belfast",
-        "Coventry",
-        "Hull",
-        "Stoke-on-Trent",
-        "Wolverhampton",
-        "Derby",
-        "Swansea",
-    ],
-    "ABD": [
-        "New York",
-        "Los Angeles",
-        "Chicago",
-        "Houston",
-        "Phoenix",
-        "Philadelphia",
-        "San Antonio",
-        "San Diego",
-        "Dallas",
-        "San Jose",
-        "Austin",
-        "Jacksonville",
-        "Fort Worth",
-        "Columbus",
-        "San Francisco",
-        "Charlotte",
-        "Indianapolis",
-        "Seattle",
-        "Denver",
-        "Washington D.C.",
-        "Boston",
-        "El Paso",
-        "Detroit",
-        "Nashville",
-        "Portland",
-        "Memphis",
-        "Oklahoma City",
-        "Las Vegas",
-        "Louisville",
-        "Baltimore",
-        "Milwaukee",
-        "Albuquerque",
-        "Tucson",
-        "Fresno",
-        "Sacramento",
-        "Kansas City",
-        "Atlanta",
-        "Miami",
-        "Omaha",
-        "Raleigh",
-        "Colorado Springs",
-    ],
-    "Kanada": [
-        "Toronto",
-        "Vancouver",
-        "Montreal",
-        "Ottawa",
-        "Calgary",
-        "Edmonton",
-        "Winnipeg",
-        "Quebec City",
-        "Hamilton",
-        "Kitchener",
-        "London",
-        "Victoria",
-        "Halifax",
-        "Oshawa",
-        "Windsor",
-        "Saskatoon",
-        "Regina",
-        "St. John's",
-        "Sherbrooke",
-        "Barrie",
-    ],
-    "Japonya": [
-        "Tokyo",
-        "Yokohama",
-        "Osaka",
-        "Nagoya",
-        "Sapporo",
-        "Kobe",
-        "Kyoto",
-        "Fukuoka",
-        "Kawasaki",
-        "Hiroşima",
-        "Sendai",
-        "Kitakyushu",
-        "Chiba",
-        "Sakai",
-        "Niigata",
-        "Hamamatsu",
-        "Shizuoka",
-        "Okayama",
-        "Kumamoto",
-        "Kagoshima",
-    ],
-    "Çin": [
-        "Pekin",
-        "Şanghay",
-        "Guangzhou",
-        "Shenzhen",
-        "Chengdu",
-        "Chongqing",
-        "Tianjin",
-        "Wuhan",
-        "Xi'an",
-        "Hangzhou",
-        "Nanjing",
-        "Shenyang",
-        "Harbin",
-        "Suzhou",
-        "Qingdao",
-        "Dalian",
-        "Zhengzhou",
-        "Changsha",
-        "Kunming",
-        "Fuzhou",
-    ],
-    "Rusya": [
-        "Moskova",
-        "St. Petersburg",
-        "Novosibirsk",
-        "Yekaterinburg",
-        "Nijniy Novgorod",
-        "Kazan",
-        "Çelyabinsk",
-        "Omsk",
-        "Samara",
-        "Rostov-na-Donu",
-        "Ufa",
-        "Krasnoyarsk",
-        "Perm",
-        "Voronej",
-        "Volgograd",
-        "Krasnodar",
-        "Saratov",
-        "Tolyatti",
-        "İjevsk",
-        "Barnaul",
-    ],
-}
+from backend.weather_service import describe_weather, fetch_current_weather
+
+# -------- Helpers: paths & city DB --------
+ASSETS_DIR = (Path(__file__).resolve().parent.parent / "assets").resolve()
 
 
+def load_city_db() -> Dict[str, Dict[str, Tuple[float, float]]]:
+    path = ASSETS_DIR / "cities.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        # tip güvenliği: list -> tuple
+        fixed = {
+            country: {
+                city: (float(lat), float(lon)) for city, (lat, lon) in cities.items()
+            }
+            for country, cities in data.items()
+        }
+        return fixed
+    except Exception as e:
+        print("[WARN] cities.json okunamadı:", e)
+        # en azından bir fallback bırak
+        return {
+            "Türkiye": {"İstanbul": (41.0082, 28.9784), "Karabük": (41.2040, 32.6260)},
+        }
+
+
+CITY_DB: Dict[str, Dict[str, Tuple[float, float]]] = load_city_db()
+
+
+# -------- LocationDialog (tema uyumlu “kart” diyalog) --------
 class LocationDialog(QDialog):
     def __init__(self, parent=None, current_country="Türkiye", current_city="İstanbul"):
         super().__init__(parent)
         self.setWindowTitle("Konum Seç")
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
-        layout = QVBoxLayout(self)
-        self.country = QComboBox(self)
-        self.city = QComboBox(self)
 
-        self.country.addItems(COUNTRIES.keys())
-        if current_country in COUNTRIES:
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+
+        self.panel = QFrame(self)
+        self.panel.setObjectName("card")
+        outer.addWidget(self.panel)
+
+        root = QVBoxLayout(self.panel)
+        root.setContentsMargins(16, 16, 16, 16)
+        root.setSpacing(10)
+
+        # soft shadow
+        shadow = QGraphicsDropShadowEffect(self.panel)
+        shadow.setBlurRadius(24)
+        shadow.setOffset(0, 6)
+        shadow.setColor(Qt.black)
+        self.panel.setGraphicsEffect(shadow)
+
+        self.country = QComboBox(self.panel)
+        self.city = QComboBox(self.panel)
+
+        self.country.addItems(list(CITY_DB.keys()))
+        if current_country in CITY_DB:
             self.country.setCurrentText(current_country)
 
-        def load_cities(cn):
+        def load_cities(cn: str):
             self.city.clear()
-            self.city.addItems(COUNTRIES.get(cn, []))
-            if current_city in COUNTRIES.get(cn, []):
+            self.city.addItems(list(CITY_DB.get(cn, {}).keys()))
+            if current_city in CITY_DB.get(cn, {}):
                 self.city.setCurrentText(current_city)
 
         load_cities(self.country.currentText())
         self.country.currentTextChanged.connect(load_cities)
 
-        layout.addWidget(QLabel("Ülke:"))
-        layout.addWidget(self.country)
-        layout.addWidget(QLabel("Şehir:"))
-        layout.addWidget(self.city)
+        root.addWidget(QLabel("Ülke:", self.panel))
+        root.addWidget(self.country)
+        root.addWidget(QLabel("Şehir:", self.panel))
+        root.addWidget(self.city)
 
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self.panel
+        )
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
+        root.addWidget(buttons)
 
-    def selected(self):
+        self.adjustSize()
+        if parent:
+            geo = parent.frameGeometry()
+            self.move(geo.center() - self.rect().center())
+
+    def selected(self) -> Tuple[str, str]:
         return self.country.currentText(), self.city.currentText()
 
 
+# -------- MainWidget --------
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -395,6 +126,7 @@ class MainWidget(QWidget):
 
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
+
         self.card = QFrame(self)
         self.card.setObjectName("card")
         outer.addWidget(self.card)
@@ -403,16 +135,16 @@ class MainWidget(QWidget):
         self.root.setContentsMargins(12, 12, 12, 12)
         self.root.setSpacing(8)
 
-        # Header (drag area)
+        # ----- Header (drag alanı) -----
         header = QFrame(self.card)
         header.setObjectName("header")
         h = QHBoxLayout(header)
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(8)
 
-        stored_country = self.settings.value("geo_country", "Türkiye")
-        stored_city = self.settings.value("geo_city", "Karabük")
-        self.location_label = QLabel(f"{stored_city}, {stored_country}", header)
+        country = self.settings.value("geo_country", "Türkiye")
+        city = self.settings.value("geo_city", "Karabük")
+        self.location_label = QLabel(f"{city}, {country}", header)
         self.location_label.setObjectName("locationLabel")
         h.addWidget(self.location_label)
         h.addStretch(1)
@@ -421,31 +153,32 @@ class MainWidget(QWidget):
         self.settings_btn.setObjectName("settingsBtn")
         self.settings_btn.setCursor(Qt.PointingHandCursor)
         self.settings_btn.setFixedSize(24, 24)
-        gear = Path(__file__).resolve().parent.parent / "assets" / "gear.svg"
+        gear = ASSETS_DIR / "gear.svg"
         if gear.exists():
             self.settings_btn.setIcon(QIcon(str(gear)))
         else:
             self.settings_btn.setText("⚙")
         self.settings_btn.clicked.connect(self.open_settings_menu)
         h.addWidget(self.settings_btn)
-        self.root.addWidget(header)
 
-        # Content
-        self.temp_value = QLabel("30 °C", self.card)
+        self.root.addWidget(header)
+        header.installEventFilter(self)  # drag sadece header'da
+
+        # ----- Content -----
+        self.temp_value = QLabel("— °C", self.card)
         self.temp_value.setObjectName("tempValue")
         self.root.addWidget(self.temp_value)
 
-        self.condition_label = QLabel("Güneşli", self.card)
+        self.condition_label = QLabel("—", self.card)
         self.condition_label.setObjectName("condition")
         self.root.addWidget(self.condition_label)
 
+        # AI consistency: png + metin
         self.consistency_row = QFrame(self.card)
         c = QHBoxLayout(self.consistency_row)
         c.setContentsMargins(0, 0, 0, 0)
         c.setSpacing(6)
-
-        ai_png = Path(__file__).resolve().parent.parent / "assets" / "ai.png"
-
+        ai_png = ASSETS_DIR / "ai.png"
         self.consistency_icon = QLabel(self.consistency_row)
         if ai_png.exists():
             pix = QPixmap(str(ai_png)).scaled(
@@ -453,27 +186,19 @@ class MainWidget(QWidget):
             )
             self.consistency_icon.setPixmap(pix)
         else:
-            # fallback (dosya yoksa)
             self.consistency_icon.setText("🤖")
-
         self.consistency_label = QLabel("%87 Tutarlılık", self.consistency_row)
         self.consistency_label.setObjectName("consistency")
-
         c.addWidget(self.consistency_icon)
         c.addWidget(self.consistency_label)
         c.addStretch(1)
-
         self.root.addWidget(self.consistency_row)
 
-        # self.consistency_label = QLabel("🤖 %87 Tutarlılık", self.card)
-        # self.consistency_label.setObjectName("consistency")
-        # self.root.addWidget(self.consistency_label)
-
-        # Load size/theme
+        # ----- Başlangıç ayarları -----
         self.apply_size(self.settings.value("size", "small"))
         self.apply_theme(self.settings.value("theme", "dark"))
 
-        # Restore screen pos (if any)
+        # ekran konumu geri yükle
         if pt := self.settings.value("pos"):
             try:
                 x, y = map(int, str(pt).split(","))
@@ -481,9 +206,10 @@ class MainWidget(QWidget):
             except Exception:
                 pass
 
-        header.installEventFilter(self)
+        # şehir->koordinat
+        self._lat, self._lon = self.resolve_coords(country, city)
 
-    # Drag only on header
+    # ---------- Drag sadece header ----------
     def eventFilter(self, obj, event):
         if obj.objectName() == "header":
             et = event.type()
@@ -510,7 +236,7 @@ class MainWidget(QWidget):
                     return True
         return super().eventFilter(obj, event)
 
-    # Settings menu
+    # ---------- Menü ----------
     def open_settings_menu(self):
         menu = QMenu(self)
 
@@ -545,44 +271,41 @@ class MainWidget(QWidget):
             act.triggered.connect(lambda _, k=key: self.apply_theme(k))
             theme_menu.addAction(act)
 
-        # Coğrafi konum (ülke/şehir)
+        # Coğrafi konum
         menu.addSeparator()
         geo_act = QAction("Konumu Değiştir (Ülke/Şehir)…", self)
         geo_act.triggered.connect(self.change_geo_location)
         menu.addAction(geo_act)
 
+        # Manuel güncelle
+        refresh_act = QAction("Şimdi güncelle", self)
+        refresh_act.triggered.connect(
+            lambda: asyncio.create_task(self.update_weather_once())
+        )
+        menu.addAction(refresh_act)
+
         menu.exec(self.settings_btn.mapToGlobal(self.settings_btn.rect().bottomRight()))
 
-    # Helpers
+    # ---------- Helpers ----------
     def apply_size(self, key: str):
-        # Görsel farklar: pencere boyutu, kart padding/spacing, bazı satırların görünürlüğü
         if key == "small":
             w, h, variant = 240, 160, "small"
             self.root.setContentsMargins(12, 12, 12, 12)
             self.root.setSpacing(6)
-            self.condition_label.setVisible(True)
-            self.consistency_label.setVisible(True)
         elif key == "medium":
             w, h, variant = 300, 200, "medium"
             self.root.setContentsMargins(14, 14, 14, 14)
             self.root.setSpacing(8)
-            self.condition_label.setVisible(True)
-            self.consistency_label.setVisible(True)
-        else:  # large
+        else:
             w, h, variant = 360, 240, "large"
             self.root.setContentsMargins(18, 18, 18, 18)
             self.root.setSpacing(10)
-            self.condition_label.setVisible(True)
-            self.consistency_label.setVisible(True)
 
         self.setFixedSize(w, h)
         self.card.setProperty("sizeVariant", variant)
-        # QSS yeniden uygula
-        self.card.style().unpolish(self.card)
-        self.card.style().polish(self.card)
-        for child in self.findChildren(QWidget):  # altlara da tazele
-            child.style().unpolish(child)
-            child.style().polish(child)
+        for wgt in [self.card, self]:
+            wgt.style().unpolish(wgt)
+            wgt.style().polish(wgt)
         self.settings.setValue("size", key)
 
     def apply_theme(self, key: str):
@@ -590,9 +313,9 @@ class MainWidget(QWidget):
         app = QApplication.instance()
         if hasattr(app, "load_styles"):
             app.load_styles(key)
-        # polish yenile
-        self.card.style().unpolish(self.card)
-        self.card.style().polish(self.card)
+        for w in [self.card, self]:
+            w.style().unpolish(w)
+            w.style().polish(w)
 
     def snap_to(self, corner: str):
         screen = QApplication.primaryScreen().availableGeometry()
@@ -614,19 +337,52 @@ class MainWidget(QWidget):
     def save_current_pos(self):
         self.settings.setValue("pos", f"{self.x()},{self.y()}")
 
+    def resolve_coords(self, country: str, city: str) -> Tuple[float, float]:
+        latlon = CITY_DB.get(country, {}).get(city)
+        if not latlon:
+            return CITY_DB["Türkiye"]["İstanbul"]
+        return latlon
+
+    async def start_weather_loop(self, interval_minutes: int = 5):
+        while True:
+            try:
+                await self.update_weather_once()
+            except Exception as e:
+                print("[weather loop] error:", e)
+            await asyncio.sleep(interval_minutes * 60)
+
+    async def update_weather_once(self):
+        lat, lon = getattr(self, "_lat", None), getattr(self, "_lon", None)
+        if lat is None or lon is None:
+            return
+        data = await fetch_current_weather(lat, lon)
+        if not data:
+            self.temp_value.setText("— °C")
+            self.condition_label.setText("Bağlantı yok")
+            return
+        temp = data.get("temperature")
+        code = data.get("weathercode")
+        self.temp_value.setText(
+            f"{int(round(temp))} °C" if temp is not None else "— °C"
+        )
+        self.condition_label.setText(describe_weather(code))
+
     def change_geo_location(self):
-        # Şu anki değerleri parçala
+        # mevcut değerleri böl
         try:
             current_city, current_country = [
                 p.strip() for p in self.location_label.text().split(",", 1)
             ]
         except Exception:
             current_country, current_city = "Türkiye", "İstanbul"
-        dialog = LocationDialog(
+
+        dlg = LocationDialog(
             self, current_country=current_country, current_city=current_city
         )
-        if dialog.exec() == QDialog.Accepted:
-            country, city = dialog.selected()
+        if dlg.exec() == QDialog.Accepted:
+            country, city = dlg.selected()
             self.location_label.setText(f"{city}, {country}")
             self.settings.setValue("geo_country", country)
             self.settings.setValue("geo_city", city)
+            self._lat, self._lon = self.resolve_coords(country, city)
+            asyncio.create_task(self.update_weather_once())

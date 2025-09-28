@@ -23,12 +23,11 @@ def make_style(theme_key: str) -> str:
     qss_path = base / fname
     qss = read_text(qss_path)
     if not qss.strip():
-        print(f"[WARN] QSS missing or empty: {qss_path}")
-        qss = "#card { background-color:#222; color:#fff; border-radius:16px; }"
+        qss = "#card { background-color: #222; color: white; border-radius: 16px; }"
     return qss
 
 
-def load_styles(theme_key: str):
+def load_styles(app: QApplication, theme_key: str):
     app.setStyle("Fusion")
     app.setStyleSheet(make_style(theme_key))
 
@@ -36,6 +35,11 @@ def load_styles(theme_key: str):
 async def main_async(app: QApplication):
     ui = MainWidget()
     ui.show()
+
+    # 🔑 açılışta ve her 5 dakikada bir güncelle
+    asyncio.create_task(ui.start_weather_loop(interval_minutes=5))
+    asyncio.create_task(ui.update_weather_once())
+
     done = asyncio.get_event_loop().create_future()
     app.aboutToQuit.connect(lambda: done.set_result(True))
     await done
@@ -44,9 +48,9 @@ async def main_async(app: QApplication):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon())
-    app.load_styles = load_styles  # type: ignore
 
     s = QSettings("YourOrg", "WeatherWidget")
+    app.load_styles = lambda theme_key: load_styles(app, theme_key)  # type: ignore
     app.load_styles(s.value("theme", "dark"))
 
     loop = QEventLoop(app)
