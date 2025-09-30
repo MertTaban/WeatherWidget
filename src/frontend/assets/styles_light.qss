@@ -1,55 +1,99 @@
-/* ===== Light Theme — High Contrast ===== */
+/* =========================
+   Modern Light — High Readability (Expanded)
+   ========================= */
+
+/* Card */
 #card {
-  /* Daha opak beyaz: arkadaki içerik parlamasın */
-  background-color: rgba(255,255,255,0.98);
-  border: 1px solid rgba(0,0,0,0.12);
+  background-color: rgba(255,255,255,0.985);
+  border: 1px solid rgba(5,16,35,0.14);
   border-radius: 16px;
-  color: #0f172a; /* slate-900 */
+  color: #0E152A;
   font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Boyuta göre baz font */
+/* Size variants (base font) */
 #card[sizeVariant="small"]  { font-size: 14px; }
 #card[sizeVariant="medium"] { font-size: 15px; }
 #card[sizeVariant="large"]  { font-size: 16px; }
 
 /* Header */
 #header {
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(15,23,42,0.08); /* slate-900 @8% */
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(15,23,42,0.12);
 }
 #locationLabel {
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.2px;
-  color: #0b1220; /* biraz daha koyu */
+  color: #0B1020;
 }
 
-/* İçerik */
-#tempValue   { font-size: 24px; font-weight: 800; color: #0b1220; }
-#condition   { font-size: 16px; font-weight: 700; color: #111827; } /* gray-900 */
-#consistency { font-style: italic; font-size: 12px; color: #475569; } /* slate-600 */
+/* Typography – content */
+#tempValue   { font-size: 24px; font-weight: 900; color: #0A0F1E; }
+#condition   { font-size: 16px; font-weight: 800; color: #111827; }
+#consistency { font-style: italic; font-size: 12.5px; color: #334155; }
 
-/* Büyük boyutta biraz daha vurgu */
+/* Large emphasis */
 #card[sizeVariant="large"] #tempValue { font-size: 28px; }
 #card[sizeVariant="large"] #condition { font-size: 18px; }
 
-/* Settings butonu ve menü */
+/* Default label color inside card (explicit) */
+#card QLabel { color: #0E152A; }
+
+/* Weather icon sizing & spacing */
+#weatherIcon { margin-right: 6px; padding: 0; }
+#card[sizeVariant="small"]  #weatherIcon { min-width: 18px; min-height: 18px; }
+#card[sizeVariant="medium"] #weatherIcon { min-width: 20px; min-height: 20px; }
+#card[sizeVariant="large"]  #weatherIcon { min-width: 22px; min-height: 22px; }
+
+/* Settings button */
 QPushButton#settingsBtn {
   border: none;
   background: transparent;
 }
 QPushButton#settingsBtn:hover {
-  background-color: rgba(15,23,42,0.06);
+  background-color: rgba(15,23,42,0.08);
   border-radius: 8px;
 }
 
-/* QMenu — açık tema için daha koyu kenar ve hafif gölge tonu */
+/* Menu */
 QMenu {
   background: #ffffff;
-  color: #0f172a;
-  border: 1px solid rgba(15,23,42,0.15);
+  color: #0E152A;
+  border: 1px solid rgba(15,23,42,0.18);
   border-radius: 10px;
 }
-QMenu::item { padding: 7px 14px; }
-QMenu::item:selected { background: rgba(15,23,42,0.06); }
+QMenu::item { padding: 8px 14px; }
+QMenu::item:selected { background: rgba(15,23,42,0.08); }
 
+/* Small menu variant */
+QMenu[smallMenu="true"] { font-size: 13px; }
+QMenu[smallMenu="true"]::item { padding: 6px 10px; }
+
+/* Dialog controls (Location dialog) */
+QComboBox {
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.14);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: #0E152A;
+}
+QComboBox:hover { background: rgba(0,0,0,0.06); }
+QComboBox QAbstractItemView {
+  background: #ffffff;
+  color: #0E152A;
+  border: 1px solid rgba(0,0,0,0.14);
+  selection-background-color: rgba(15,23,42,0.10);
+}
+
+QDialogButtonBox QPushButton {
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.20);
+  background: rgba(0,0,0,0.05);
+  color: #0B1020;
+  font-weight: 700;
+}
+QDialogButtonBox QPushButton:hover { background: rgba(0,0,0,0.09); }
+
+/* Ensure legibility of labels inside card */
+#card QFrame QLabel { color: #0E152A; }

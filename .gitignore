@@ -1,2 +1,7 @@
 *.pyc
 src/backend/weather_prediction_model.pkl
+src/weather_prediction_model.pkl
+*.pkl
+*.joblib
+/build/WeatherWidget
+dist/WeatherWidget.exe

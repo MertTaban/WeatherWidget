@@ -1,39 +1,103 @@
+/* =========================
+   Modern Dark — High Readability (Expanded)
+   ========================= */
+
+/* Card */
 #card {
-  background-color: rgba(20,20,28,0.92);
-  border: 1px solid rgba(255,255,255,0.12);
+  background-color: rgba(15,17,23,0.98); /* #0F1117 */
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 16px;
-  color: #e8e8f0;
+  color: #E8ECF4;
   font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Boyuta göre tipografi */
-#card[sizeVariant="small"]  { font-size: 13px; }
-#card[sizeVariant="medium"] { font-size: 15px; }
-#card[sizeVariant="large"]  { font-size: 17px; }
+/* Size variants (base font) */
+#card[sizeVariant="small"]  { font-size: 13.5px; }
+#card[sizeVariant="medium"] { font-size: 14.5px; }
+#card[sizeVariant="large"]  { font-size: 15.5px; }
 
 /* Header */
-#header { padding-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-#locationLabel { font-weight: 600; letter-spacing: 0.2px; }
+#header {
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+#locationLabel {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #F2F5FA;
+}
 
-/* İçerik */
-#tempValue { font-size: 22px; font-weight: 700; }
-#condition { font-size: 16px; font-weight: 700; }
-#consistency { font-style: italic; font-size: 11px; color: #c9c9d6; }
+/* Typography – content */
+#tempValue   { font-size: 24px; font-weight: 800; color: #FFFFFF; }
+#condition   { font-size: 16px; font-weight: 700; color: #D8DEEA; }
+#consistency { font-style: italic; font-size: 12px; color: #AAB4C4; }
 
-/* Boyut farklılıkları (örnek: large'ta daha güçlü başlık) */
-#card[sizeVariant="large"] #tempValue { font-size: 26px; }
+/* Large emphasis */
+#card[sizeVariant="large"] #tempValue { font-size: 28px; }
 #card[sizeVariant="large"] #condition { font-size: 18px; }
 
-/* Settings butonu ve menü */
-QPushButton#settingsBtn { border: none; background: transparent; }
-QPushButton#settingsBtn:hover { background-color: rgba(255,255,255,0.08); border-radius: 8px; }
+/* Default label color inside card (explicit) */
+#card QLabel { color: #E8ECF4; }
 
-QMenu {
-  background: #1e1f27;
-  color: #e8e8f0;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
+/* Weather icon sizing & spacing */
+#weatherIcon { margin-right: 6px; padding: 0; }
+#card[sizeVariant="small"]  #weatherIcon { min-width: 18px; min-height: 18px; }
+#card[sizeVariant="medium"] #weatherIcon { min-width: 20px; min-height: 20px; }
+#card[sizeVariant="large"]  #weatherIcon { min-width: 22px; min-height: 22px; }
+
+/* Settings button (always visible on dark) */
+QPushButton#settingsBtn {
+  border: none;
+  background: rgba(255,255,255,0.06); /* subtle plate to pop in dark */
+  border-radius: 6px;
 }
-QMenu::item { padding: 6px 12px; }
-QMenu::item:selected { background: rgba(255,255,255,0.08); }
+QPushButton#settingsBtn:hover {
+  background-color: rgba(255,255,255,0.12);
+}
 
+/* Menu */
+QMenu {
+  background: #171A22;
+  color: #E8ECF4;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+}
+QMenu::item { padding: 8px 14px; }
+QMenu::item:selected { background: rgba(255,255,255,0.12); }
+
+/* Small menu variant */
+QMenu[smallMenu="true"] { font-size: 12.5px; }
+QMenu[smallMenu="true"]::item { padding: 6px 10px; }
+
+/* Dialog controls (Location dialog) */
+QComboBox {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: #E8ECF4;
+}
+QComboBox:hover { background: rgba(255,255,255,0.12); }
+QComboBox QAbstractItemView {
+  background: #171A22;
+  color: #E8ECF4;
+  border: 1px solid rgba(255,255,255,0.16);
+  selection-background-color: rgba(255,255,255,0.14);
+}
+
+QDialogButtonBox QPushButton {
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.20);
+  background: rgba(255,255,255,0.10);
+  color: #F2F5FA;
+  font-weight: 600;
+}
+QDialogButtonBox QPushButton:hover { background: rgba(255,255,255,0.16); }
+
+/* Consistency row — make AI png legible */
+#consistency QLabel {
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 2px 4px;
+}

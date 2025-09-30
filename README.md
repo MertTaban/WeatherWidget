@@ -45,10 +45,103 @@ pip install -r requirements.txt
 python main.py
 ```
 
-### 2. EXE Üzerinden Kullanım
+---
 
-- `build.bat` dosyasını çalıştırarak `.exe` çıktısını alın
+## 1. Geliştirme Ortamında Çalıştırma
+
+```bash
+pip install -r requirements.txt
+python src/app.py
+```
+
+---
+
+## 2. EXE Üzerinden Kullanım
+
+- `build.bat` dosyasını çalıştırarak `.exe` çıktısını alın\
 - Üretilen `.exe` dosyasını çift tıklayarak uygulamayı çalıştırın
+
+---
+
+### 1️⃣ Model Hariç Gömme (Tavsiye Edilen)
+
+Bu yöntemde exe dosyasına **tüm kütüphaneler + QSS temaları + ikonlar**
+gömülür,\
+ancak `weather_prediction_model.joblib` ayrı tutulur.\
+Böylece modeli gerektiğinde kolayca güncelleyebilirsiniz.
+
+#### Adımlar:
+
+```bash
+pip install pyinstaller
+pyinstaller --onefile --noconsole src/app.py ^
+  --name WeatherWidget ^
+  --add-data "src/frontend/assets/styles_dark.qss;assets" ^
+  --add-data "src/frontend/assets/styles_light.qss;assets" ^
+  --add-data "src/frontend/assets/figma;figma" ^
+  --icon=src/frontend/assets/app.ico
+```
+
+#### Kullanım:
+
+- Oluşan `dist/WeatherWidget.exe` dosyasını çalıştırın.\
+- `weather_prediction_model.joblib` dosyasını exe ile aynı klasöre
+  koyun.\
+- Eğer model bulunamazsa, uygulama aynı klasörde bir `error.txt`
+  oluşturur ve\
+  içinde `model.joblib bulunamadı` uyarısı yer alır.
+
+---
+
+### 2️⃣ Model Dahil Gömme
+
+Bu yöntemde model de exe içine gömülür.\
+Tek dosya ile dağıtım yapılabilir ancak modeli güncellemek için exe'yi
+yeniden üretmek gerekir.
+
+#### Adımlar:
+
+```bash
+pip install pyinstaller
+pyinstaller --onefile --noconsole src/app.py ^
+  --name WeatherWidget ^
+  --add-data "src/frontend/views/weather_prediction_model.joblib;." ^
+  --add-data "src/frontend/assets/styles_dark.qss;assets" ^
+  --add-data "src/frontend/assets/styles_light.qss;assets" ^
+  --add-data "src/frontend/assets/figma;figma" ^
+  --icon=src/frontend/assets/app.ico
+```
+
+#### Kullanım:
+
+- `dist/WeatherWidget.exe` dosyasını doğrudan çalıştırın.\
+- Model exe içine gömülü olduğundan ayrıca kopyalamanız gerekmez.
+
+---
+
+## 3. Notlar
+
+- Windows için `--add-data` parametresinde ayraç `;` kullanılmalıdır.\
+- Linux/Mac için `:` kullanılmalıdır.\
+- `app.ico` uygulama ikonunuzdur, yoksa çıkarabilirsiniz.
+
+---
+
+## 3️⃣ Ek Notlar
+
+- Stil dosyaları (`styles_dark.qss`, `styles_light.qss`) ve `assets/` klasörü de `--add-data` parametresi ile gömülmelidir.
+- Eğer tray ikonu veya görseller kullanılacaksa, ilgili yollar da eklenmelidir. Örnek:
+
+```bash
+--add-data "src/frontend/assets;frontend/assets"
+```
+
+---
+
+## Özet
+
+- **Versiyon 1 (Model Hariç):** Daha esnek, güncelleme kolay.
+- **Versiyon 2 (Model Dahil):** Tek dosya, ama model güncellemesi için tekrar derleme gerek.
 
 ---
 
