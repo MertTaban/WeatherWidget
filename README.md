@@ -1,4 +1,4 @@
-<img width="204" height="282" alt="med-dark-prew" src="https://github.com/user-attachments/assets/ae8c8881-c805-4063-8769-ed62700af0c7" /># 🌦️ WeatherWidget – Masaüstü Hava Durumu Widget’ı
+# 🌦️ WeatherWidget – Masaüstü Hava Durumu Widget’ı
 
 WeatherWidget, geçmiş 10 yıllık meteorolojik veriyi analiz ederek güncel hava tahminlerini **tutarlılık yüzdesi** ile birlikte sunan modern bir masaüstü widget uygulamasıdır.  
 Bu proje, geliştiricilerin ekip çalışması deneyimi kazanması ve teknik tecrübelerini artırması amacıyla hayata geçirilmiştir.
