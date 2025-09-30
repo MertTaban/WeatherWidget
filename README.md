@@ -147,7 +147,9 @@ pyinstaller --onefile --noconsole src/app.py ^
 
 ## 📸 Ekran Görüntüleri
 
-_(Buraya ekran görüntüleri ve gif’ler eklenecek)_
+### Açık Tema
+
+### Koyu Tema
 
 ---
 
