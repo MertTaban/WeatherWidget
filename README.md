@@ -1,4 +1,4 @@
-# 🌦️ WeatherWidget – Masaüstü Hava Durumu Widget’ı
+<img width="204" height="282" alt="med-dark-prew" src="https://github.com/user-attachments/assets/ae8c8881-c805-4063-8769-ed62700af0c7" /># 🌦️ WeatherWidget – Masaüstü Hava Durumu Widget’ı
 
 WeatherWidget, geçmiş 10 yıllık meteorolojik veriyi analiz ederek güncel hava tahminlerini **tutarlılık yüzdesi** ile birlikte sunan modern bir masaüstü widget uygulamasıdır.  
 Bu proje, geliştiricilerin ekip çalışması deneyimi kazanması ve teknik tecrübelerini artırması amacıyla hayata geçirilmiştir.
@@ -147,7 +147,15 @@ pyinstaller --onefile --noconsole src/app.py ^
 
 ## 📸 Ekran Görüntüleri
 
-_(Buraya ekran görüntüleri ve gif’ler eklenecek)_
+### Açık Tema
+<img width="200" height="176" alt="small-prew" src="https://github.com/user-attachments/assets/839ab4b9-68e6-436a-92c1-c0d4e1f870c5" />
+<img width="197" height="277" alt="med-prew" src="https://github.com/user-attachments/assets/a9f6b028-542c-4f9a-8555-8557788b7e63" />
+<img width="377" height="191" alt="big-prew" src="https://github.com/user-attachments/assets/54fec28c-1eb2-4a71-911c-42c6b3d5dbd1" />
+
+### Koyu Tema
+<img width="200" height="185" alt="small-dark-prew" src="https://github.com/user-attachments/assets/6e5b5dd9-d094-4b18-889e-27b85d8dec8a" />
+<img width="204" height="282" alt="med-dark-prew" src="https://github.com/user-attachments/assets/568e7683-31fb-4040-ad6b-7feee94c93c6" />
+<img width="388" height="207" alt="big-dark-prew" src="https://github.com/user-attachments/assets/b38555a2-ae16-41c8-9a11-87f1fb0a0266" />
 
 ---
 
